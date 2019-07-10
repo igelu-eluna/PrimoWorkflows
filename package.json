@@ -1,0 +1,12 @@
+{
+  "name": "workflows",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "cypress": "cypress open"
+  },
+  "dependencies": {
+    "cypress": "^3.4.0"
+  }
+}
