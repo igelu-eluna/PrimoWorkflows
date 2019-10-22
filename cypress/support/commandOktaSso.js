@@ -1,3 +1,13 @@
+/* sso: an object with the folowing configuration set (MQ values provided as an example):
+{
+    "primoUrl": "https://multisearch.mq.edu.au/primo-explore/search?vid=MQ",
+    "primoPdsBaseUrl": "https://macquarie-primoprod.hosted.exlibrisgroup.com",
+    "primoPdsLoginUrl": "https://multisearch.mq.edu.au:443/primo_library/libweb/pdsLogin?targetURL=https%3A%2F%2Fmultisearch.mq.edu.au%2Fprimo-explore%2Fsearch%3Fvid%3DMQ%26from-new-ui%3D1%26authenticationProfile%3DBASE_PROFILE",
+    "primoInstitute": "MQ",
+    "oktaBase": "https://mq.okta.com"
+}
+*/
+
 Cypress.Commands.add("ssoOkta", (username, password, sso) => {
     let okta_req_url;
 
@@ -115,10 +125,9 @@ Cypress.Commands.add("ssoOkta", (username, password, sso) => {
                             }
                         }).then(res => {
                             // extract the URL from the page
-                            cy.log(res);
                             let regex = new RegExp("onload = \"location = '(.*?)'");
                             let match = res.body.match(regex);
-                            let url = primoPdsBaseUrl + match[1];
+                            let url = sso.primoPdsBaseUrl + match[1];
 
                             // when this is '&amp;' there is a 500 error, however, replacing with regular '&' works.
                             url = url.replace(/&amp;/g, "&");
