@@ -138,7 +138,7 @@ Cypress.Commands.add("ssoOkta", (username, password, sso) => {
                                 the setting of some Authentication cookies which in effect means
                                 that we are logged in. Hooray!
                             **********************************************************************/
-                            cy.visit(url);
+                            cy.request(url);
                         });
                     });
                 });
