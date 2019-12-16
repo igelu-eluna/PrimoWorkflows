@@ -1,8 +1,14 @@
-const primoData = require("../../fixtures/primo-data");
+let fixtures = {};
 
 context("Performing a basic search actions", () => {
+    before(() => {
+        ["primo"].map(fixture => {
+            cy.fixture(Cypress.env("ORG") + "/" + fixture).then(fx => (fixtures[fixture] = fx));
+        });
+    });
+
     beforeEach(() => {
-        cy.visit(primoData.primoUrl);
+        cy.visit(fixtures["primo"].primoUrl);
     });
 
     it("performs a basic search", () => {
