@@ -1,0 +1,6 @@
+{
+    "env": {
+        "ORG": "example",
+        "USER": "user01"
+    }
+}
