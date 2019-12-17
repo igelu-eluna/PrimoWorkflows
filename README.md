@@ -34,9 +34,9 @@ The areas of the project that concern us most are:
         │   └──mq             <-- Macquarie University fixtures
         │       └──secure     <-- Secure folder to store MQ user objects
         └──integrations       <-- Folder that holds all tests
-            ├──core           <-- 'Core' workflow tests
-            ├──custom         <-- 'Custom' workflow tests
-            │   └──mq         <-- 'Custom' tests workflow for Macquarie University
+            ├──core           <-- Core workflow tests
+            ├──custom         <-- Custom workflow tests
+            │   └──mq         <-- Custom workflow tests for Macquarie University
             ├──example        <-- Example folder for sample tests
             │   └──tests      <-- Example test folder
             └──unit           <-- Folder for smaller unit tests
