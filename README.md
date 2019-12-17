@@ -72,6 +72,7 @@ There are three configuration items you need to be aware of:
 
     An example of a simple fixture for **Primo** is below (**primo.json**):
 
+
         {
             "primoUrl": "https://multisearch.mq.edu.au/primo-explore/search?vid=MQ"
         }
