@@ -37,8 +37,10 @@ The areas of the project that concern us most are:
             ├──core           <-- 'Core' workflow tests
             ├──custom         <-- 'Custom' workflow tests
             │   └──mq         <-- 'Custom' tests workflow for Macquarie University
-            └──example        <-- Example folder for sample tests
-                └──tests      <-- Example test folder
+            ├──example        <-- Example folder for sample tests
+            │   └──tests      <-- Example test folder
+            └──unit           <-- Folder for smaller unit tests
+                └──mq         <-- Folder for an institutions smaller unit tests
 
 There are three configuration items you need to be aware of:
 
@@ -80,8 +82,12 @@ There are three configuration items you need to be aware of:
 
     Within each organisations fixture folder, there is a special folder called **secure**. This folder is where you can place any user objects that contain user information such as (but not limited to), username, password, display name etc.. You can have a look in the _example_ folder's secure folder to have a look at a user object. The example folder's _secure_ folder is the only _secure_ folder that gets added to the repository. Any other organisations _secure_ folders are ignored - this is configured in the .gitignore file in the repository root.
 
-3.  Configuring **Custom** tests:
+3.  Adding **Custom** tests:
 
     If you are just using **Core** tests, there is nothing to add to this folder.
 
     If you are using custom tests, then you should create a folder under the **custom** folder that has the same name as the **ORG** environment variable that you configured in **cypress.json**. Anything under this folder is managed by the owning organisation and you can place any custom tests under this folder in your preferred structure.
+
+4.  Adding **Unit** tests:
+
+    We can use the **unit** folder for smaller tests that test specific pieces of functionality. This will keep a cleaner separation from the larger workflow tests that we will be working on. We can also use these test as smaller building blocks to construct the larger workflow tests that we would like to automate.
