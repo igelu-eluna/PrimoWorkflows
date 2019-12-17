@@ -1,15 +1,16 @@
 {
-  "name": "workflows",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "cypress": "cypress open"
-  },
-  "dependencies": {
-    "cypress": "^3.4.1"
-  },
-  "devDependencies": {
-    "eslint-plugin-cypress": "^2.7.0"
-  }
+    "name": "workflows",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "cypress": "cypress open"
+    },
+    "dependencies": {
+        "cypress": "^3.8.0"
+    },
+    "devDependencies": {
+        "eslint": "^6.7.2",
+        "eslint-plugin-cypress": "^2.8.0"
+    }
 }

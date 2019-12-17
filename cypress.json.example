@@ -1,0 +1,8 @@
+{
+    "env": {
+        "ORG": "example",
+        "USER": "user01"
+    },
+    "defaultCommandTimeout": 8000,
+    "requestTimeout": 8000
+}

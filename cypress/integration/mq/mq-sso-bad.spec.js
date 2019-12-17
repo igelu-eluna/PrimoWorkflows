@@ -1,9 +1,10 @@
 // SSO configuration details.
-const ssoOkta = require("../../../fixtures/sso-okta-mq");
+
+const configPrimo = require("../../../fixtures/" + Cypress.env("ORG") + "/primo");
 
 context("Showing what happens when we click on the Sign In link", () => {
     beforeEach(() => {
-        cy.visit(ssoOkta.primoUrl);
+        cy.visit(configPrimo.primoUrl);
     });
 
     it("shows outcome from Sign In click", () => {
