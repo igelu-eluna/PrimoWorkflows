@@ -79,4 +79,3 @@ There are three configuration items you need to be aware of:
     __TODO:__ Create a standard set of fixtures which have a specific name and structure that will be used against __Core__ tests.
 
     Within each organisations fixture folder, there is a special folder called __secure__. This folder is where you can place any user objects that contain user information such as (but not limited to), username, password, display name etc.. You can have a look in the _example_ folder's secure folder to have a look at a user object. The example folder's _secure_ folder is the only _secure_ folder that gets added to the repository. Any other organisations _secure_ folders are ignored - this is configured in the .gitignore file in the repository root.
-
