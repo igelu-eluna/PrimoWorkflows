@@ -1,5 +1,6 @@
 /* sso: an object with the folowing configuration set (MQ values provided as an example):
 {
+    "type": "okta",
     "primoUrl": "https://multisearch.mq.edu.au/primo-explore/search?vid=MQ",
     "primoPdsBaseUrl": "https://macquarie-primoprod.hosted.exlibrisgroup.com",
     "primoPdsLoginUrl": "https://multisearch.mq.edu.au:443/primo_library/libweb/pdsLogin?targetURL=https%3A%2F%2Fmultisearch.mq.edu.au%2Fprimo-explore%2Fsearch%3Fvid%3DMQ%26from-new-ui%3D1%26authenticationProfile%3DBASE_PROFILE",
@@ -8,7 +9,7 @@
 }
 */
 
-Cypress.Commands.add("ssoOkta", (username, password, sso) => {
+Cypress.Commands.add("authOkta", (username, password, authConfig) => {
     let okta_req_url;
 
     /**********************************************************************
@@ -19,13 +20,13 @@ Cypress.Commands.add("ssoOkta", (username, password, sso) => {
     **********************************************************************/
     cy.request({
         method: "GET",
-        url: sso.primoPdsBaseUrl + "/pds",
+        url: authConfig.primoPdsBaseUrl + "/pds",
         qs: {
             func: "load-login",
             calling_system: "primo",
-            institute: sso.primoInstitute,
+            institute: authConfig.primoInstitute,
             lang: "und",
-            url: sso.primoPdsLoginUrl
+            url: authConfig.primoPdsLoginUrl
         }
     }).then(res => {
         // We extract the URL from the page and submit it.
@@ -62,7 +63,7 @@ Cypress.Commands.add("ssoOkta", (username, password, sso) => {
                 **********************************************************************/
                 cy.request({
                     method: "POST",
-                    url: sso.oktaBase + "/api/v1/authn",
+                    url: authConfig.oktaBase + "/api/v1/authn",
                     headers: {
                         Referrer: okta_req_url,
                         Accept: "application/json",
@@ -90,7 +91,7 @@ Cypress.Commands.add("ssoOkta", (username, password, sso) => {
                     **********************************************************************/
                     cy.request({
                         method: "GET",
-                        url: sso.oktaBase + "/login/sessionCookieRedirect",
+                        url: authConfig.oktaBase + "/login/sessionCookieRedirect",
                         qs: {
                             checkAccountSetupComplete: "true",
                             token: okta_token["sessionToken"],
@@ -127,7 +128,7 @@ Cypress.Commands.add("ssoOkta", (username, password, sso) => {
                             // extract the URL from the page
                             let regex = new RegExp("onload = \"location = '(.*?)'");
                             let match = res.body.match(regex);
-                            let url = sso.primoPdsBaseUrl + match[1];
+                            let url = authConfig.primoPdsBaseUrl + match[1];
 
                             // when this is '&amp;' there is a 500 error, however, replacing with regular '&' works.
                             url = url.replace(/&amp;/g, "&");

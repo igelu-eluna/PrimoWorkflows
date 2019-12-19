@@ -1,4 +1,5 @@
 {
+    "type": "okta",
     "primoUrl": "https://multisearch.mq.edu.au/primo-explore/search?vid=MQ",
     "primoPdsBaseUrl": "https://macquarie-primoprod.hosted.exlibrisgroup.com",
     "primoPdsLoginUrl": "https://multisearch.mq.edu.au:443/primo_library/libweb/pdsLogin?targetURL=https%3A%2F%2Fmultisearch.mq.edu.au%2Fprimo-explore%2Fsearch%3Fvid%3DMQ%26from-new-ui%3D1%26authenticationProfile%3DBASE_PROFILE",
