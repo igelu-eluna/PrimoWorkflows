@@ -2,9 +2,8 @@ let fixtures = {};
 
 context("Performing a basic search actions", () => {
     before(() => {
-        ["primo"].map(fixture => {
-            cy.fixture(Cypress.env("ORG") + "/" + fixture).then(fx => (fixtures[fixture] = fx));
-        });
+        // load fixtures.
+        cy.fixture(Cypress.env("ORG") + "/" + Cypress.env("PRIMO")).then(fx => (fixtures["primo"] = fx));
     });
 
     beforeEach(() => {

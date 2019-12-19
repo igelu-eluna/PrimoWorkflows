@@ -13,14 +13,14 @@ context("Checking that we can SSO into Primo", () => {
         // load fixtures, then do sso login.
         Cypress.Promise.all([
             cy.fixture(Cypress.env("ORG") + "/secure/" + Cypress.env("USER")).then(fx => (fixtures["user"] = fx)),
-            cy.fixture(Cypress.env("ORG") + "/okta").then(fx => (fixtures["okta"] = fx))
+            cy.fixture(Cypress.env("ORG") + "/" + Cypress.env("AUTH")).then(fx => (fixtures["auth"] = fx))
         ]).then(() => {
-            cy.ssoOkta(fixtures["user"].username, fixtures["user"].password, fixtures["okta"]);
+            cy.authenticate(fixtures["user"].username, fixtures["user"].password, fixtures["auth"]);
         });
     });
 
     beforeEach(() => {
-        cy.visit(fixtures["okta"].primoUrl);
+        cy.visit(fixtures["auth"].primoUrl);
     });
 
     it("has the correct display name on the Sign In box", () => {

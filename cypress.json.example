@@ -1,7 +1,9 @@
 {
     "env": {
         "ORG": "example",
+        "PRIMO": "primo-prd",
         "USER": "user01"
+        "AUTH": "okta"
     },
     "defaultCommandTimeout": 8000,
     "requestTimeout": 8000

@@ -50,13 +50,15 @@ There are three configuration items you need to be aware of:
         {
             "env": {
                 "ORG": "mq",
-                "USER": "user01"
+                "PRIMO": "primo-prd",
+                "USER": "user01",
+                "AUTH": "okta"
             },
             "defaultCommandTimeout": 8000,
             "requestTimeout": 8000
         }
 
-    We create a file called **cypress.json** in the repository root with the contents above. This file sets up some parameters for Cypress. The _defaultCommandTimeout_ by default is 4000 milliseconds. We've changed this to 8000 milliseconds as some instances of Primo are a bit slower to load. This allows more time for loading and will reduce test errors on timeouts. Similarly, we've upped the _requestTimeout_ value from 4000 to 8000 milliseconds as well.
+    We create a file called **cypress.json** in the repository root with similar contents above. This file sets up some parameters for Cypress. The _defaultCommandTimeout_ by default is 4000 milliseconds. We've changed this to 8000 milliseconds as some instances of Primo are a bit slower to load. This allows more time for loading and will reduce test errors on timeouts. Similarly, we've upped the _requestTimeout_ value from 4000 to 8000 milliseconds as well.
 
     We also configure some environment variables for telling Cypress which **fixtures** to use:
 
@@ -64,13 +66,40 @@ There are three configuration items you need to be aware of:
 
         We set the **ORG** value to a unique code for our organisation. The value of this code will be the same name as the folders we will be using under the **fixtures** and **integrations** folders (take 'mq' as an example).
 
-2.  Configuring **fixtures**:
+    -   **PRIMO**
+
+        This variable points to the fixture representing the Primo instance you want to test. You could have multiple fixtures to test multiple views of your Primo instance or multiple Primo instances such as production and sandbox. Create a fixture for each and set this to the one you want to test.
+
+    -   **USER**
+
+        For workflows that require authenticated users, you set this to the fixture in the **secure** folder with the user object representing the user details. The user object is structured as:
+
+            {
+                "username": "username",
+                "password": "password",
+                "displayName": "Example User"
+            }
+
+    -   **AUTH**
+
+        For workflows that require authentication, you set this fixture to be the configuration of your authentication system. An example for authenticating via SSO with Okta:
+
+            {
+                "type": "okta",
+                "primoUrl": "https://multisearch.mq.edu.au/primo-explore/search?vid=MQ",
+                "primoPdsBaseUrl": "https://macquarie-primoprod.hosted.exlibrisgroup.com",
+                "primoPdsLoginUrl": "https://multisearch.mq.edu.au:443/primo_library/libweb/pdsLogin?targetURL=https%3A%2F%2Fmultisearch.mq.edu.au%2Fprimo-explore%2Fsearch%3Fvid%3DMQ%26from-new-ui%3D1%26authenticationProfile%3DBASE_PROFILE",
+                "primoInstitute": "MQ",
+                "oktaBase": "https://mq.okta.com"
+            }
+
+2)  Configuring **fixtures**:
 
     Within the **fixtures** folder, create a folder for your organisation. This folder should have the same name as the environment variable, **ORG**, that we configured in **cypress.json**.
 
     This folder contains custom values for your organisation. The structure of any _fixtures_ used in **Core** tests will need to be standardised to be able to interoperate with the **Core** tests. As the project is new, these structures will evolve over time and eventually stabilise. For **fixtures** that you use in **Custom** tests, there are not structural restrictions, although we might have to recommend a naming structure that does not conflict with **Core** fixtures.
 
-    An example of a simple fixture for **Primo** is below (**primo.json**):
+    An example of a simple fixture for **Primo** is below (**primo-prd.json**):
 
 
         {
