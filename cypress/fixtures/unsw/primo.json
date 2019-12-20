@@ -1,3 +1,7 @@
 {
-    "primoUrl": "https://primoauat.library.unsw.edu.au/primo-explore/search?vid=UNSWS"
+    "primoUrl": "https://primoauat.library.unsw.edu.au/primo-explore/search?vid=UNSWS",
+	"primoPRODUrl": "https://primoa.library.unsw.edu.au/primo-explore/search?vid=UNSWS",
+	"SearchGatewayUATUrl": "https://primoauat.library.unsw.edu.au/primo-explore/search?vid=UNSWC",
+	"SearchGatewayPRODUrl":  "https://primoa.library.unsw.edu.au/primo-explore/search?vid=UNSWC",
+	"LegantoLASUTestUrl": "https://unsw-psb.alma.exlibrisgroup.com/leganto/login?"
 }
