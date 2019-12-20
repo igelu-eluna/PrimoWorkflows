@@ -6,15 +6,17 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
         url: authConfig.primoPdsLoginUrl
     }).then(res => {
         console.log(res);
+        let re = new RegExp("(https://.*?)/");
         let page = Cypress.$(Cypress.$.parseHTML(res.body));
-        console.log(page);
         let action = page.find("form").attr("action");
+        let lastResponse = res.allRequestResponses[res.allRequestResponses.length - 1];
+        let baseUrl = re.exec(lastResponse["Request URL"])[1];
 
-        console.log("action", action);
+        console.log("url:", baseUrl + action);
 
         cy.request({
             method: "POST",
-            url: action,
+            url: baseUrl + action,
             form: true,
             body: {
                 username: username,
