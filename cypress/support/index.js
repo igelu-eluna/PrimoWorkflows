@@ -19,3 +19,7 @@ import "./commandAuth";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.Cookies.defaults({
+    whitelist: ["JSESSIONID", "shib_idp_session", "shib_idp_session_ss"]
+});
