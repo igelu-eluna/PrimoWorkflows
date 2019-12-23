@@ -1,11 +1,3 @@
-/* simple user object with auth details:
-{
-    "username": "[username]",
-    "password": "[password]",
-    "displayName": "Display Name"
-}
-*/
-
 let fixtures = {};
 
 context("Checking that we can SSO into Primo", () => {

@@ -1,26 +1,18 @@
 Cypress.Commands.add("authShib", (username, password, authConfig) => {
+    Cypress.Cookies.debug(true, { verbose: true });
+
     let req_url;
-    let cookieJessionId;
-
-    cy.getCookie("JSESSIONID").then(c => {
-        cookieJessionId = c;
-        console.log("cookie:", cookieJessionId);
-    });
-
-    cy.wait(cy.visit(authConfig.primoUrl2)).then(() => {
-        cy.getCookies();
-    });
 
     cy.request({
         method: "GET",
         url: authConfig.primoUrl
     }).then(res => {
-        cy.getCookies();
+        console.log("respons01:", res);
         cy.request({
             method: "GET",
             url: authConfig.primoPdsLoginUrl
         }).then(res => {
-            console.log("respons01:", res);
+            console.log("respons02:", res);
             const page = Cypress.$(Cypress.$.parseHTML(res.body));
             const samlResponse = page.find("input[name='SAMLResponse']").attr("value");
             if (!samlResponse) {
@@ -29,8 +21,6 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
                 const lastResponse = res.allRequestResponses[res.allRequestResponses.length - 1];
                 const baseUrl = re.exec(lastResponse["Request URL"])[1];
                 req_url = baseUrl + action;
-
-                console.log("url:", baseUrl + action);
 
                 cy.request({
                     method: "POST",
@@ -42,7 +32,7 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
                         _eventId_proceed: ""
                     }
                 }).then(res => {
-                    console.log("respons02a:", res);
+                    console.log("respons03a:", res);
                     const page = Cypress.$(Cypress.$.parseHTML(res.body));
                     const action = page
                         .filter("form")
@@ -63,17 +53,10 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
                             RelayState: relayState,
                             SAMLResponse: samlResponse
                         }
-                    }).then(res => {
-                        console.log("respons03a:", res);
-                        cy.request({
-                            method: "GET",
-                            url: authConfig.primoUrl2
-                        })
                     });
                 });
             } else {
-                console.log("respons02b:", res);
-                const page = Cypress.$(Cypress.$.parseHTML(res.body));
+                console.log("respons03b:", res);
                 const action = page
                     .filter("form")
                     .first()
@@ -93,12 +76,6 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
                         RelayState: relayState,
                         SAMLResponse: samlResponse
                     }
-                }).then(res => {
-                    console.log("respons03b:", res);
-                    cy.request({
-                        method: "GET",
-                        url: authConfig.primoUrl2
-                    })
                 });
             }
 
