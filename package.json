@@ -7,7 +7,7 @@
         "cypress": "cypress open"
     },
     "dependencies": {
-        "cypress": "^3.8.0"
+        "cypress": "^3.8.1"
     },
     "devDependencies": {
         "eslint": "^6.7.2",

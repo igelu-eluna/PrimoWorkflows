@@ -4,6 +4,7 @@
 
 import "./commandAuthOkta";
 import "./commandAuthShib";
+import "./commandAuthShib2";
 
 Cypress.Commands.add("authenticate", (username, password, authConfig) => {
     expect(authConfig.type).to.exist;
@@ -11,6 +12,8 @@ Cypress.Commands.add("authenticate", (username, password, authConfig) => {
         cy.authOkta(username, password, authConfig);
     } else if (authConfig.type === "shib") {
         cy.authShib(username, password, authConfig);
+    } else if (authConfig.type === "shib2") {
+        cy.authShib2(username, password, authConfig);
     } else {
         cy.log("unable to handle authentication type:", authConfig.type);
     }
