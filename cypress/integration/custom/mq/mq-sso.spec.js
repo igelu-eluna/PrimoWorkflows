@@ -18,4 +18,8 @@ context("Checking that we can SSO into Primo", () => {
     it("has the correct display name on the Sign In box", () => {
         cy.get("span.user-name").contains(fixtures["user"].displayName);
     });
+
+    it("has the correct display name on the Sign In box for a second test", () => {
+        cy.get("span.user-name").contains(fixtures["user"].displayName);
+    });
 });
