@@ -12,6 +12,5 @@ context("Checking that we can SSO into Primo", () => {
 
     it("has the correct display name on the Sign In box", () => {
         cy.visit(fixtures["auth"].primoSearch);
-        cy.getCookies();
     });
 });

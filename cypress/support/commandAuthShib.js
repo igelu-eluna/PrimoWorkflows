@@ -1,18 +1,21 @@
 Cypress.Commands.add("authShib", (username, password, authConfig) => {
-    Cypress.Cookies.debug(true, { verbose: true });
+    Cypress.config("baseUrl", authConfig.baseUrl);
 
-    let req_url;
-
+    // trigger first cookie (JSESSIONID)
     cy.request({
         method: "GET",
-        url: authConfig.primoUrl
+        url: authConfig.primoConfig
     }).then(res => {
-        console.log("respons01:", res);
+        // go to the login url
+        console.log("response01:", res);
         cy.request({
             method: "GET",
             url: authConfig.primoPdsLoginUrl
         }).then(res => {
-            console.log("respons02:", res);
+            // check the page - two possible options:
+            // 1. SAMLResponse exists (i.e. we are already logged into the IdP)
+            // 2. No SAMLResponse exists (i.e. we do not have an IdP session and need to login)
+            console.log("response02:", res);
             const page = Cypress.$(Cypress.$.parseHTML(res.body));
             const samlResponse = page.find("input[name='SAMLResponse']").attr("value");
             if (!samlResponse) {
@@ -20,8 +23,9 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
                 const action = page.find("form").attr("action");
                 const lastResponse = res.allRequestResponses[res.allRequestResponses.length - 1];
                 const baseUrl = re.exec(lastResponse["Request URL"])[1];
-                req_url = baseUrl + action;
+                const req_url = baseUrl + action;
 
+                // submit login form with username/password to IdP
                 cy.request({
                     method: "POST",
                     url: req_url,
@@ -32,118 +36,56 @@ Cypress.Commands.add("authShib", (username, password, authConfig) => {
                         _eventId_proceed: ""
                     }
                 }).then(res => {
-                    console.log("respons03a:", res);
-                    const page = Cypress.$(Cypress.$.parseHTML(res.body));
-                    const action = page
-                        .filter("form")
-                        .first()
-                        .prop("action");
-                    const samlResponse = page.find("input[name='SAMLResponse']").attr("value");
-                    const relayState = page.find("input[name='RelayState']").attr("value");
-
-                    cy.request({
-                        method: "POST",
-                        url: action,
-                        form: true,
-                        headers: {
-                            Referer: req_url,
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        body: {
-                            RelayState: relayState,
-                            SAMLResponse: samlResponse
-                        }
-                    });
+                    doPrimoLogin(res, authConfig);
                 });
             } else {
-                console.log("respons03b:", res);
-                const action = page
-                    .filter("form")
-                    .first()
-                    .prop("action");
-                const samlResponse = page.find("input[name='SAMLResponse']").attr("value");
-                const relayState = page.find("input[name='RelayState']").attr("value");
-
-                cy.request({
-                    method: "POST",
-                    url: action,
-                    form: true,
-                    headers: {
-                        Referer: req_url,
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: {
-                        RelayState: relayState,
-                        SAMLResponse: samlResponse
-                    }
-                });
+                doPrimoLogin(res, authConfig);
             }
-
-            // if (url != null) {
-            //     url = url.replace("0; url=", "");
-            //     cy.request(url).then(res => {
-            //         req_url = res.redirects[0].replace("302: ", "");
-            //         cy.request({
-            //             method: "POST",
-            //             url: authConfig.oktaBase + "/api/v1/authn",
-            //             headers: {
-            //                 Referrer: req_url,
-            //                 Accept: "application/json",
-            //                 "Content-Type": "application/json"
-            //             },
-            //             body: {
-            //                 password: password,
-            //                 username: username,
-            //                 options: {
-            //                     warnBeforePasswordExpired: true,
-            //                     multiOptionalFactorEnroll: true
-            //                 }
-            //             }
-            //         }).then(res => {
-            //             let okta_token = res.body;
-            //             cy.request({
-            //                 method: "GET",
-            //                 url: authConfig.oktaBase + "/login/sessionCookieRedirect",
-            //                 qs: {
-            //                     checkAccountSetupComplete: "true",
-            //                     token: okta_token["sessionToken"],
-            //                     redirectUrl: req_url
-            //                 }
-            //             }).then(res => {
-            //                 // extract the SAML Response and RelayState values
-            //                 let page = Cypress.$(Cypress.$.parseHTML(res.body));
-            //                 let url = page.find("#appForm").attr("action");
-            //                 let samlResponse = page.find("#appForm input[name='SAMLResponse']").attr("value");
-            //                 let relayState = page.find("#appForm input[name='RelayState']").attr("value");
-
-            //                 cy.request({
-            //                     method: "POST",
-            //                     url: url,
-            //                     form: true,
-            //                     body: {
-            //                         SAMLResponse: samlResponse,
-            //                         RelayState: relayState
-            //                     },
-            //                     headers: {
-            //                         Referer: req_url,
-            //                         Accept: "application/json",
-            //                         "Content-Type": "application/x-www-form-urlencoded"
-            //                     }
-            //                 }).then(res => {
-            //                     // extract the URL from the page
-            //                     let regex = new RegExp("onload = \"location = '(.*?)'");
-            //                     let match = res.body.match(regex);
-            //                     let url = authConfig.primoPdsBaseUrl + match[1];
-
-            //                     // when this is '&amp;' there is a 500 error, however, replacing with regular '&' works.
-            //                     url = url.replace(/&amp;/g, "&");
-
-            //                     cy.request(url);
-            //                 });
-            //             });
-            //         });
-            //     });
-            // }
         });
     });
 });
+
+function doPrimoLogin(res, authConfig) {
+    // we get back a page with the SAMLResponse
+    console.log("response03:", res);
+    const page = Cypress.$(Cypress.$.parseHTML(res.body));
+    const action = page
+        .filter("form")
+        .first()
+        .prop("action");
+    const samlResponse = page.find("input[name='SAMLResponse']").attr("value");
+    const relayState = page.find("input[name='RelayState']").attr("value");
+
+    // submit the SAMLResponse to Primo
+    cy.request({
+        method: "POST",
+        url: action,
+        form: true,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: {
+            RelayState: relayState,
+            SAMLResponse: samlResponse
+        },
+        followRedirects: false
+    }).then(res => {
+        console.log("response04:", res);
+
+        // extract loginId, use loginId to get a new JWT, set JWT
+        const reLogin = new RegExp("loginId=(.*)&?");
+        const loginId = reLogin.exec(res.redirectedToUrl)[1];
+        const reVid = new RegExp(".*/(.+)");
+        const vid = reVid.exec(authConfig.primoConfig)[1];
+        const url = authConfig.baseUrl + authConfig.primoJwtUrl + loginId + "?vid=" + vid;
+        cy.request({
+            method: "GET",
+            url: url
+        }).then(res => {
+            console.log("response05:", res);
+            cy.window().then(win => {
+                win.sessionStorage.setItem("primoExploreJwt", res.body);
+            });
+        });
+    });
+}
