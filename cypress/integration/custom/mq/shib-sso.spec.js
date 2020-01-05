@@ -12,7 +12,7 @@ context("Checking that we can SSO into Primo", () => {
     });
 
     beforeEach(() => {
-        cy.visit(fixtures["auth"].primoUrl);
+        cy.visit(fixtures["auth"].primoSearch);
     });
 
     it("has the correct display name on the Sign In box", () => {

@@ -1,0 +1,8 @@
+{
+    "type": "shib",
+    "baseUrl": "https://search-test.obvsg.at",
+    "primoConfig": "/primo_library/libweb/webservices/rest/v1/configuration/USB",
+    "primoSearch": "/primo-explore/search?vid=USB&lang=de_DE",
+    "primoPdsLoginUrl": "/primo_library/libweb/primoExploreLogin?institution=USB&lang=de_DE&target-url=https%3A%2F%2Fsearch-test.obvsg.at%2Fprimo-explore%2Fsearch%3Fvid%3DUSB%26lang%3Dde_DE&authenticationProfile=SAML_PROFILE&auth=SAML&isSilent=false",
+    "primoJwtUrl": "/primo_library/libweb/webservices/rest/v1/loginJwtCache/"
+}
