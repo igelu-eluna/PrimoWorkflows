@@ -2,6 +2,8 @@
 
 ## Overview
 
+[__Quick Start Guide__](QuickStart.md)
+
 This project aims to create a framework for automatically testing a range of Primo Workflows.
 
 As part of the project, we will:
@@ -121,5 +123,3 @@ There are three configuration items you need to be aware of:
 4.  Adding **Unit** tests:
 
     We can use the **unit** folder for smaller tests that test specific pieces of functionality. This will keep a cleaner separation from the larger workflow tests that we will be working on. We can also use these test as smaller building blocks to construct the larger workflow tests that we would like to automate.
-
-# TODO Create quickstart guide
